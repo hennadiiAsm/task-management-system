@@ -1,0 +1,29 @@
+server:
+  forward-headers-strategy: framework
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/task-management
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+
+jwt:
+  secret: dGFzay1tYW5hZ2VtZW50LXN5c3RlbS1oZW5uYWRpaS1hc21vbG92
+  token-expiration-time-minutes: 20
+  refresh-token-expiration-time-minutes: 40
+
+logging:
+  level:
+    org.springframework.security: debug
+
+---
+
+spring.config.activate.on-profile: docker
+
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/task-management

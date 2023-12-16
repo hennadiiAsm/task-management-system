@@ -1,0 +1,56 @@
+= Steps for start-up
+
+== Before all
+
+You can uncomment link:src/main/java/ru/effectivemobile/tms/TaskManagementSystemApplication.java[ApplicationRunner,] and it will prepopulate DB with 1 user (`email@mail.com` and  `password`), 1 task and 1 comment.
+
+Any way described below requires Docker running and assumes that port 8080 is currently free.
+
+== First way
+
+Starting from Spring Boot 3.1 there is an alternative to using docker directly described in https://spring.io/blog/2023/06/23/improved-testcontainers-support-in-spring-boot-3-1[Spring blog]. Just go link:src/test/java/ru/effectivemobile/tms/TestTaskManagementSystemApplication.java[here] and start main method.
+
+== Second way
+
+Make sure that port 5432 is free
+
+This will start only db in container
+
+[source,shell]
+----
+docker container run --rm -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=task-management postgres:16
+----
+
+== Third way
+
+Open your shell and move to a project root directory.
+
+If you have Gradle installed, enter this command:
+[source,shell]
+----
+gradle bootJar
+----
+Otherwise, enter:
+[source,shell]
+----
+./gradlew bootJar
+----
+
+Enter these commands to start application and database in separate docker containers:
+[source,shell]
+----
+docker compose build --no-cache
+docker compose up -d
+----
+
+When you are done, enter:
+
+[source,shell]
+----
+docker compose down -v
+----
+
+== Finally
+
+Now you can open a browser and access http://localhost:8080/swagger-ui/index.html[Swagger UI],
+OpenAPI description for http://localhost:8080/v3/api-docs[json format] or for http://localhost:8080/v3/api-docs.yaml[yaml format]
